@@ -3,46 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>PHCC | Smart Patient Safety Dashboard – Enhanced</title>
+    <title>PHCC | Smart Patient Safety Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg1: #021a1a;
-            --bg2: #063d3d;
-            --accent: #00ffc6;
-            --accent2: #00b4ff;
+            --bg-dark: #021a1a;
+            --bg-teal: #063d3d;
+            --neon: #00ffc6;
+            --cyan: #00b4ff;
             --danger: #ff4d6d;
             --warning: #ffaa44;
-            --glass: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.07);
             --glass-card: rgba(255, 255, 255, 0.12);
         }
 
         body {
-            margin: 0;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-teal));
             font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, var(--bg1), var(--bg2));
             color: #fff;
             min-height: 100vh;
         }
 
-        /* floating gradient backdrops */
         body::before {
             content: "";
             position: fixed;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, var(--accent), transparent);
-            filter: blur(120px);
-            top: -100px;
-            left: -100px;
-            opacity: 0.4;
+            background: radial-gradient(circle, var(--neon), transparent);
+            filter: blur(130px);
+            top: -150px;
+            left: -150px;
+            opacity: 0.3;
             pointer-events: none;
             z-index: 0;
         }
@@ -52,11 +46,11 @@
             position: fixed;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, var(--accent2), transparent);
+            background: radial-gradient(circle, var(--cyan), transparent);
             filter: blur(140px);
             bottom: -80px;
             right: -80px;
-            opacity: 0.3;
+            opacity: 0.25;
             pointer-events: none;
             z-index: 0;
         }
@@ -69,88 +63,74 @@
             padding: 20px 24px 40px;
         }
 
-        /* header */
         .glass-header {
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             background: var(--glass);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 14px 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border-radius: 60px;
+            margin-bottom: 30px;
         }
 
         .logo h1 {
-            font-size: 1.6rem;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            font-size: 1.7rem;
+            background: linear-gradient(90deg, var(--neon), var(--cyan));
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
 
-        .logo p {
-            font-size: 0.75rem;
-            opacity: 0.7;
-        }
-
-        .demo-badge {
-            background: rgba(0, 255, 198, 0.15);
-            backdrop-filter: blur(8px);
-            padding: 6px 18px;
+        .demo-alert {
+            background: rgba(255, 170, 68, 0.2);
+            border-left: 4px solid var(--warning);
+            padding: 8px 16px;
             border-radius: 40px;
-            font-size: 0.7rem;
-            border: 1px solid rgba(0, 255, 198, 0.3);
+            font-size: 0.75rem;
         }
 
-        /* filter bar */
         .filter-bar {
+            background: var(--glass-card);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 18px 22px;
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             align-items: flex-end;
-            background: var(--glass-card);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            padding: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
+
         .filter-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
-        .filter-group label {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            font-weight: 600;
-        }
+
+        .filter-group label { font-size: 0.7rem; opacity: 0.7; font-weight: 600; }
         .filter-group input, .filter-group select {
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 30px;
+            padding: 8px 18px;
+            border-radius: 40px;
             color: white;
         }
+
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 8px 20px;
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            padding: 8px 24px;
             border-radius: 40px;
             cursor: pointer;
             transition: 0.2s;
+            font-weight: 500;
         }
-        .btn-outline:hover {
-            background: var(--accent);
-            color: #000;
-        }
+        .btn-outline:hover { background: var(--neon); color: #000; }
 
-        /* stat cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -165,29 +145,13 @@
             padding: 20px 12px;
             text-align: center;
             cursor: pointer;
-            transition: 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.15);
         }
-
-        .stat-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-icon { font-size: 2.2rem; margin-bottom: 10px; }
+        .stat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); }
         .stat-value { font-size: 2.4rem; font-weight: 800; }
-        .stat-label { font-size: 0.7rem; opacity: 0.7; text-transform: uppercase; margin-top: 6px; }
+        .stat-label { font-size: 0.7rem; opacity: 0.7; margin-top: 6px; }
 
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 198, 0.5); }
-            70% { box-shadow: 0 0 0 18px transparent; }
-            100% { box-shadow: 0 0 0 0 transparent; }
-        }
-
-        /* charts row */
         .charts-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -199,356 +163,253 @@
             background: var(--glass);
             backdrop-filter: blur(12px);
             border-radius: 28px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .chart-card h3 {
-            font-size: 1rem;
-            margin-bottom: 16px;
-            border-left: 3px solid var(--accent);
-            padding-left: 12px;
-        }
-
-        canvas { max-height: 210px; width: 100%; }
-
-        /* tabs */
         .tabs-container {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 28px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0,0,0,0.3);
             backdrop-filter: blur(12px);
             padding: 8px 20px;
             border-radius: 60px;
         }
-
         .tab-btn {
             background: transparent;
             border: none;
             padding: 10px 26px;
             font-weight: 600;
-            font-size: 0.85rem;
             border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
             color: #eef2ff;
         }
-
-        .tab-btn:hover { background: rgba(0, 255, 198, 0.2); }
         .tab-btn.active {
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            background: linear-gradient(90deg, var(--neon), var(--cyan));
             color: #000;
             box-shadow: 0 4px 12px rgba(0, 255, 198, 0.4);
         }
-
-        .tab-content { display: none; animation: fadeSlide 0.25s ease; }
+        .tab-content { display: none; animation: fadeIn 0.2s ease; }
         .tab-content.active { display: block; }
-
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
             background: var(--glass-card);
             backdrop-filter: blur(12px);
             border-radius: 32px;
-            padding: 28px;
+            padding: 24px;
             margin-bottom: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-left: 4px solid var(--accent);
-            padding-left: 16px;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
         }
-
         input, select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 28px;
+            padding: 10px 16px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
             color: white;
-            font-size: 0.85rem;
         }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 255, 198, 0.2);
+        .btn-primary {
+            background: linear-gradient(90deg, var(--neon), var(--cyan));
+            border: none;
+            padding: 10px 26px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
         }
-
+        .btn-small {
+            background: rgba(0, 255, 198, 0.2);
+            border: none;
+            padding: 4px 12px;
+            border-radius: 30px;
+            color: white;
+            margin: 2px;
+            cursor: pointer;
+        }
         .table-wrapper {
             overflow-x: auto;
             max-height: 450px;
             overflow-y: auto;
             border-radius: 24px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.8rem;
         }
-
         th, td {
-            padding: 14px 12px;
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
+        th { background: rgba(0,0,0,0.4); }
 
-        th { background: rgba(0, 0, 0, 0.3); font-weight: 700; }
-        tr:hover { background: rgba(255, 255, 255, 0.05); }
-
-        /* badges */
         .badge-critical, .badge-high, .badge-medium, .badge-low,
-        .badge-open, .badge-closed, .badge-valid { display: inline-block; padding: 4px 14px; border-radius: 40px; font-size: 0.7rem; font-weight: 600; }
-        .badge-critical, .badge-open { background: #ff4d6d; color: white; }
+        .badge-open, .badge-closed, .badge-valid, .badge-expired {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-critical, .badge-open, .badge-expired { background: #ff4d6d; color: white; }
         .badge-high { background: #ffaa44; color: #000; }
         .badge-medium { background: #00b4ff; color: #000; }
         .badge-low, .badge-closed, .badge-valid { background: #00ffc6; color: #000; }
 
-        .btn-primary {
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-weight: 700;
-            color: #000;
-            cursor: pointer;
-            transition: 0.2s;
+        .progress-bar {
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            height: 10px;
+            margin: 18px 0;
         }
-        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0, 255, 198, 0.5); }
-        .btn-small {
-            background: rgba(0, 255, 198, 0.2);
-            border: none;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            color: white;
-            cursor: pointer;
-            margin: 2px;
+        .progress-fill {
+            background: linear-gradient(90deg, var(--neon), var(--cyan));
+            width: 0%;
+            height: 10px;
+            border-radius: 20px;
         }
-
         .risk-matrix {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
-            margin-top: 20px;
+            margin-top: 18px;
         }
         .matrix-cell {
             padding: 12px 4px;
             text-align: center;
-            border-radius: 16px;
-            background: rgba(0, 0, 0, 0.4);
+            border-radius: 14px;
+            font-size: 0.7rem;
             font-weight: bold;
-        }
-        .progress-bar {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            height: 10px;
-            margin: 20px 0;
-        }
-        .progress-fill {
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            width: 0%;
-            height: 10px;
-            border-radius: 20px;
-            transition: width 0.5s;
+            background: rgba(0,0,0,0.5);
         }
         .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
             background: #000;
-            color: var(--accent);
-            padding: 12px 24px;
+            color: var(--neon);
+            padding: 10px 24px;
             border-radius: 40px;
             opacity: 0;
-            transform: translateY(20px);
             transition: 0.25s;
+            border: 1px solid var(--neon);
             z-index: 999;
-            border: 1px solid var(--accent);
         }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        footer {
-            margin-top: 48px;
-            text-align: center;
-            font-size: 0.7rem;
-            opacity: 0.6;
-        }
-        @media (max-width: 720px) {
-            .app-container { padding: 16px; }
-            .tab-btn { padding: 8px 18px; }
-        }
+        .toast.show { opacity: 1; transform: translateY(-8px); }
+        footer { margin-top: 48px; text-align: center; font-size: 0.7rem; opacity: 0.6; }
     </style>
 </head>
 <body>
-
 <div class="glass-header">
-    <div class="logo">
-        <h1>🏥 PHCC Smart Safety Dashboard</h1>
-        <p>Risk Intelligence · Patient First · Real‑time</p>
-    </div>
-    <div class="demo-badge">✨ DEMO · Enhanced Analytics · Chokri1/Chokri12/Chokri123</div>
+    <div class="logo"><h1>⚕️ PHCC Smart Safety Dashboard</h1><p>Risk Intelligence · JCI · WHO PSFHI · Full RCA & CAPA</p></div>
+    <div class="demo-alert">⚠️ Demo version — Real‑time sync & HRIS integration are simulated for portfolio</div>
 </div>
-
 <div class="app-container">
-    <!-- FILTER BAR (Date range + location) -->
+    <!-- Filter row (only date/location, no extra buttons) -->
     <div class="filter-bar">
-        <div class="filter-group">
-            <label>📅 From Date</label>
-            <input type="date" id="filterFrom" value="2026-04-01">
-        </div>
-        <div class="filter-group">
-            <label>📅 To Date</label>
-            <input type="date" id="filterTo" value="2026-04-28">
-        </div>
-        <div class="filter-group">
-            <label>📍 Location</label>
-            <select id="filterLocation">
-                <option value="all">All Locations</option>
-                <option value="HC 1">Health Center 1</option>
-                <option value="HC 2">Health Center 2</option>
-                <option value="HC 3">Health Center 3</option>
-                <option value="HC 4">Health Center 4</option>
-                <option value="HC 5">Health Center 5</option>
-            </select>
-        </div>
+        <div class="filter-group"><label>📅 From</label><input type="date" id="filterFrom"></div>
+        <div class="filter-group"><label>📅 To</label><input type="date" id="filterTo"></div>
+        <div class="filter-group"><label>📍 Location</label><select id="filterLocation"><option value="all">All Locations</option><option>HC 1</option><option>HC 2</option><option>HC 3</option><option>HC 4</option><option>HC 5</option></select></div>
         <button class="btn-outline" onclick="applyFilters()">Apply Filters</button>
         <button class="btn-outline" onclick="resetFilters()">Reset</button>
     </div>
 
-    <!-- stats grid (clickable) -->
+    <!-- KPI cards -->
     <div class="stats-grid">
-        <div class="stat-card pulse" onclick="switchTab('incidents')"><div class="stat-icon">📋</div><div class="stat-value" id="statTotalIncidents">0</div><div class="stat-label">Total Incidents</div></div>
-        <div class="stat-card" onclick="switchTab('incidents')"><div class="stat-icon">⚠️</div><div class="stat-value" id="statOpenIncidents">0</div><div class="stat-label">Open Incidents</div></div>
-        <div class="stat-card" onclick="switchTab('riskregister')"><div class="stat-icon">📊</div><div class="stat-value" id="statActiveRisks">0</div><div class="stat-label">Active Risks</div></div>
-        <div class="stat-card" onclick="switchTab('riskregister')"><div class="stat-icon">🎯</div><div class="stat-value" id="statHighRisk">0</div><div class="stat-label">High/Critical Risks</div></div>
-        <div class="stat-card" onclick="switchTab('checklist')"><div class="stat-icon">✅</div><div class="stat-value" id="statCompliance">0%</div><div class="stat-label">Compliance Score</div></div>
-        <class="stat-card" onclick="switchTab('training')"><div class="stat-icon">📈</div><div class="stat-value" id="statTrainingRate">0%</div><div class="stat-label">Training Compliance</div></div>
+        <div class="stat-card" onclick="switchTab('incidents')"><div class="stat-value" id="statTotalIncidents">0</div><div class="stat-label">Total Incidents</div></div>
+        <div class="stat-card" onclick="switchTab('incidents')"><div class="stat-value" id="statOpenIncidents">0</div><div class="stat-label">Open Incidents</div></div>
+        <div class="stat-card" onclick="switchTab('riskregister')"><div class="stat-value" id="statActiveRisks">0</div><div class="stat-label">Active Risks</div></div>
+        <div class="stat-card" onclick="switchTab('riskregister')"><div class="stat-value" id="statHighRisk">0</div><div class="stat-label">High/Critical Risks</div></div>
+        <div class="stat-card" onclick="switchTab('checklist')"><div class="stat-value" id="statCompliance">0%</div><div class="stat-label">Compliance Score</div></div>
+        <div class="stat-card" onclick="switchTab('training')"><div class="stat-value" id="statTrainingRate">0%</div><div class="stat-label">Training Validity</div></div>
     </div>
 
-    <!-- charts row (including new root cause chart) -->
+    <!-- Charts row -->
     <div class="charts-row">
-        <div class="chart-card"><h3>📈 Incident trend (30 days)</h3><canvas id="trendCanvas"></canvas></div>
-        <div class="chart-card"><h3>🥧 Severity distribution</h3><canvas id="severityCanvas"></canvas></div>
-        <div class="chart-card"><h3>⚠️ Risk distribution</h3><canvas id="riskCanvas"></canvas></div>
+        <div class="chart-card"><h3>📈 Incident Trend (30d)</h3><canvas id="trendCanvas"></canvas></div>
+        <div class="chart-card"><h3>🥧 Severity Distribution</h3><canvas id="severityCanvas"></canvas></div>
+        <div class="chart-card"><h3>⚠️ Risk Register Profile</h3><canvas id="riskCanvas"></canvas></div>
     </div>
-    <!-- additional row for root cause analytics -->
     <div class="charts-row">
-        <div class="chart-card"><h3>🔍 Top 5 Root Causes (from CAPA)</h3><canvas id="rootCauseCanvas"></canvas></div>
-        <div class="chart-card"><h3>📋 Incident Trend by Severity (filterable)</h3><canvas id="severityTrendCanvas"></canvas></div>
+        <div class="chart-card"><h3>🔍 Top Root Causes (CAPA)</h3><canvas id="rootCauseCanvas"></canvas></div>
+        <div class="chart-card"><h3>📉 Severity Weekly Trend</h3><canvas id="severityTrendCanvas"></canvas></div>
     </div>
 
-    <!-- tabs -->
+    <!-- Tabs -->
     <div class="tabs-container">
         <button class="tab-btn active" data-tab="incidents">📋 Incidents</button>
         <button class="tab-btn" data-tab="riskregister">⚠️ Risk Register</button>
         <button class="tab-btn" data-tab="rca">🔍 RCA & CAPA</button>
         <button class="tab-btn" data-tab="training">📚 Training</button>
-        <button class="tab-btn" data-tab="checklist">📋 Checklist</button>
+        <button class="tab-btn" data-tab="checklist">📋 Checklist/Gap</button>
         <button class="tab-btn" data-tab="report">📊 Quarterly Report</button>
     </div>
 
     <!-- INCIDENTS TAB -->
     <div id="tab-incidents" class="tab-content active">
-        <div class="card"><h3>📋 Report Incident</h3>
-            <div class="form-grid">
-                <div class="form-group"><label>Date</label><input type="date" id="incDate" value="2026-04-28"></div>
-                <div class="form-group"><label>Type</label><select id="incType"><option>Patient Fall</option><option>Medication Error</option><option>HAI</option><option>Communication Error</option><option>Near Miss</option></select></div>
-                <div class="form-group"><label>Severity</label><select id="incSev"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
-                <div class="form-group"><label>Location</label><input type="text" id="incLoc" placeholder="Health Center"></div>
-            </div>
-            <div class="form-group"><label>Description</label><textarea id="incDesc" rows="2"></textarea></div>
-            <div class="form-group"><label>Immediate Action</label><textarea id="incAction" rows="1"></textarea></div>
-            <button class="btn-primary" onclick="addIncident()">➕ Report Incident</button>
+        <div class="card"><h3>➕ Report Incident</h3><div class="form-grid">
+            <input type="date" id="incDate"><select id="incType"><option>Patient Fall</option><option>Medication Error</option><option>HAI</option><option>Communication Error</option><option>Near Miss</option></select>
+            <select id="incSev"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select>
+            <input id="incLoc" placeholder="Location (e.g., HC 2)"></div>
+            <textarea id="incDesc" rows="2" placeholder="Description"></textarea>
+            <button class="btn-primary" style="margin-top:12px" onclick="addIncident()">➕ Report Incident</button>
         </div>
-        <div class="card"><h3>📋 Incidents List</h3><div class="table-wrapper"><table id="incidentsTable"><thead><tr><th>Date</th><th>Type</th><th>Severity</th><th>Location</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table></div></div>
+        <div class="card"><h3>📋 Incident Log</h3><div class="table-wrapper"><table id="incidentsTable"><thead><tr><th>Date</th><th>Type</th><th>Severity</th><th>Location</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div>
     </div>
 
-    <!-- RISK REGISTER TAB (unchanged) -->
+    <!-- RISK REGISTER -->
     <div id="tab-riskregister" class="tab-content">
-        <div class="card"><h3>⚠️ Add Risk</h3>
-            <div class="form-grid">
-                <div class="form-group"><label>Risk Description</label><input type="text" id="riskDesc"></div>
-                <div class="form-group"><label>Likelihood (1-5)</label><select id="riskLikelihood"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-                <div class="form-group"><label>Impact (1-5)</label><select id="riskImpact"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-                <div class="form-group"><label>Risk Owner</label><input type="text" id="riskOwner"></div>
-            </div>
-            <button class="btn-primary" onclick="addRisk()">➕ Add</button>
+        <div class="card"><h3>⚠️ Register New Risk</h3><div class="form-grid">
+            <input id="riskDesc" placeholder="Risk description"><select id="riskLikelihood"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+            <select id="riskImpact"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select><input id="riskOwner" placeholder="Owner"></div>
+            <button class="btn-primary" onclick="addRisk()">Add Risk</button>
         </div>
-        <div class="card"><h3>📊 Risk Register</h3><div class="table-wrapper"><table id="riskTable"><thead><tr><th>Risk</th><th>L</th><th>I</th><th>Score</th><th>Level</th><th>Owner</th><th>Action</th></tr></thead><tbody></tbody></table></div></div>
-        <div class="card"><h3>🔥 Heatmap</h3><div id="riskMatrix" class="risk-matrix"></div></div>
+        <div class="card"><h3>📊 Risk Register</h3><div class="table-wrapper"><table id="riskTable"><thead><tr><th>Risk</th><th>L</th><th>I</th><th>Score</th><th>Level</th><th>Owner</th><th></th></tr></thead><tbody></tbody></table></div><div id="riskMatrix" class="risk-matrix"></div></div>
     </div>
 
-    <!-- RCA & CAPA TAB (unchanged) -->
+    <!-- RCA & CAPA -->
     <div id="tab-rca" class="tab-content">
-        <div class="card"><h3>🔍 5 Whys & CAPA</h3>
-            <div class="form-grid"><div class="form-group"><label>Incident ID</label><input id="rcaId"></div><div class="form-group"><label>Problem</label><input id="rcaProblem"></div></div>
-            <div class="form-group"><label>Why 1</label><input id="why1"></div><div class="form-group"><label>Why 2</label><input id="why2"></div><div class="form-group"><label>Why 3</label><input id="why3"></div><div class="form-group"><label>Why 4</label><input id="why4"></div><div class="form-group"><label>Why 5 (Root Cause)</label><input id="why5"></div>
-            <div class="form-group"><label>Corrective Action</label><textarea id="capaAction" rows="2"></textarea></div>
-            <div class="form-grid"><div class="form-group"><label>Responsible</label><input id="capaResp"></div><div class="form-group"><label>Target Date</label><input type="date" id="capaTarget"></div></div>
-            <button class="btn-primary" onclick="addCAPA()">➕ Create CAPA</button>
+        <div class="card"><h3>🔍 5 Whys & CAPA</h3><div class="form-grid"><input id="rcaId" placeholder="Incident ID"><input id="rcaProblem" placeholder="Problem Statement"></div>
+            <input id="why1" placeholder="Why 1"><input id="why2" placeholder="Why 2"><input id="why3" placeholder="Why 3"><input id="why4" placeholder="Why 4"><input id="why5" placeholder="Why 5 (Root Cause)">
+            <textarea id="capaAction" rows="2" placeholder="Corrective Action Plan"></textarea>
+            <div class="form-grid"><input id="capaResp" placeholder="Responsible"><input type="date" id="capaTarget"></div>
+            <button class="btn-primary" onclick="addCAPA()">Create CAPA</button>
         </div>
-        <div class="card"><h3>📋 CAPA Records</h3><div class="table-wrapper"><table id="capaTable"><thead><tr><th>Incident ID</th><th>Root Cause</th><th>Action</th><th>Responsible</th><th>Target</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table></div></div>
+        <div class="card"><h3>📋 CAPA Register</h3><div class="table-wrapper"><table id="capaTable"><thead><tr><th>Incident ID</th><th>Root Cause</th><th>Action</th><th>Owner</th><th>Target</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div>
     </div>
 
-    <!-- TRAINING TAB -->
+    <!-- TRAINING -->
     <div id="tab-training" class="tab-content">
-        <div class="card"><h3>📚 Add Training</h3>
-            <div class="form-grid"><div class="form-group"><label>Staff</label><input id="trainStaff"></div><div class="form-group"><label>Topic</label><select id="trainTopic"><option>Hand Hygiene</option><option>IPC</option><option>IPSG</option><option>Incident Reporting</option><option>Risk Management</option></select></div></div>
-            <div class="form-grid"><div class="form-group"><label>Completion Date</label><input type="date" id="trainDate"></div><div class="form-group"><label>Expiry Date</label><input type="date" id="trainExpiry"></div><div class="form-group"><label>Score (%)</label><input type="number" id="trainScore" min="0" max="100"></div></div>
-            <button class="btn-primary" onclick="addTraining()">➕ Add</button>
-        </div>
-        <div class="card"><h3>📊 Competence</h3><div class="progress-bar"><div class="progress-fill" id="trainingProgressFill"></div></div><div class="table-wrapper"><table id="trainingTable"><thead><tr><th>Staff</th><th>Topic</th><th>Date</th><th>Expiry</th><th>Score</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table></div></div>
+        <div class="card"><h3>📘 Staff Training Record</h3><div class="form-grid"><input id="trainStaff" placeholder="Staff name"><select id="trainTopic"><option>Hand Hygiene</option><option>IPC</option><option>IPSG</option><option>Incident Reporting</option><option>Risk Management</option></select></div>
+        <div class="form-grid"><input type="date" id="trainDate"><input type="date" id="trainExpiry"><input type="number" id="trainScore" placeholder="Score %"></div>
+        <button class="btn-primary" onclick="addTraining()">Add Training</button></div>
+        <div class="card"><div class="progress-bar"><div class="progress-fill" id="trainingProgressFill"></div></div><div class="table-wrapper"><table id="trainingTable"><thead><tr><th>Staff</th><th>Topic</th><th>Date</th><th>Expiry</th><th>Score</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div>
     </div>
 
-    <!-- COMPLIANCE CHECKLIST TAB -->
+    <!-- CHECKLIST GAP ANALYSIS -->
     <div id="tab-checklist" class="tab-content">
-        <div class="card"><h3>📋 Integrated Checklist</h3><div class="table-wrapper"><table id="checklistTable"><thead><tr><th>Standard</th><th>Domain</th><th>Requirement</th><th>Clause</th><th>Status</th><th>Notes</th><th></th></tr></thead><tbody></tbody></table></div><div class="progress-bar"><div class="progress-fill" id="checklistProgressFill"></div></div><button class="btn-primary" onclick="exportGapAnalysis()">📎 Export CSV</button></div>
+        <div class="card"><h3>✅ Integrated Standards (PHCC Job, JCI, WHO, ACI, ISO)</h3><div class="table-wrapper"><table id="checklistTable"><thead><tr><th>Standard</th><th>Domain</th><th>Requirement</th><th>Clause</th><th>Status</th><th>Notes</th><th>Action</th></tr></thead><tbody></tbody></table></div><div class="progress-bar"><div class="progress-fill" id="checklistProgressFill"></div></div><button class="btn-primary" onclick="exportGapCSV()">📎 Export Gap CSV</button></div>
     </div>
 
-    <!-- QUARTERLY REPORT TAB (with PDF export) -->
+    <!-- QUARTERLY REPORT -->
     <div id="tab-report" class="tab-content">
-        <div class="card">
-            <h3>📊 Quarterly Report</h3>
-            <button class="btn-primary" onclick="generateQuarterlyReport()">Generate Text Report</button>
-            <button class="btn-primary" onclick="downloadPDFReport()" style="margin-left: 12px;">📄 Download PDF Report</button>
-            <div id="reportOutput" style="margin-top:24px; background:rgba(0,0,0,0.5); padding:20px; border-radius:28px; font-family:monospace; font-size:12px; white-space:pre-wrap; display:none;"></div>
-        </div>
+        <div class="card"><h3>📑 Quarterly Report (MOPH Format)</h3><button class="btn-primary" onclick="generateQuarterlyReport()">Generate Preview</button><button class="btn-primary" style="margin-left:12px" onclick="downloadPDFReport()">⬇️ Download PDF</button><div id="reportOutput" style="margin-top:24px; background:rgba(0,0,0,0.6); padding:20px; border-radius:28px; font-family: monospace; font-size:12px; white-space:pre-wrap; display:none;"></div></div>
     </div>
-
-    <footer>⚡ Enhanced demo – date filters, root cause analytics, PDF export | Data simulated (Chokri1/Chokri12/Chokri123)</footer>
+    <footer>⚡ Aligned with PHCC Risk Management Framework · JCI IPSG · ISO 31000 · Clause 7.2</footer>
 </div>
-
-<div id="toast" class="toast">✓ Success</div>
+<div id="toast" class="toast"></div>
 
 <script>
-    // Toast notification
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    // ---------- LOCALSTORAGE ----------
+    // ---- localStorage helpers ----
     const STORE = {
         incidents: () => JSON.parse(localStorage.getItem('phcc_incidents') || '[]'),
         risks: () => JSON.parse(localStorage.getItem('phcc_risks') || '[]'),
@@ -561,345 +422,199 @@
     function saveCAPA(data) { localStorage.setItem('phcc_capa', JSON.stringify(data)); }
     function saveTrain(data) { localStorage.setItem('phcc_training', JSON.stringify(data)); }
     function saveCheck(data) { localStorage.setItem('phcc_checklist', JSON.stringify(data)); }
+    function toast(msg) { const t=document.getElementById('toast'); t.innerText=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
 
-    // ---------- INIT CHECKLIST (same as before) ----------
+    // Alert on load to indicate simulation
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            toast("🔔 Demo alert: Real-time sync & HRIS integration are simulated for this portfolio.");
+        }, 500);
+    });
+
+    // Initialize checklist (PHCC + JCI + WHO major gaps)
     function initChecklist() {
-        if (STORE.checklist().length === 0) {
+        if(STORE.checklist().length===0){
             const items = [
-                { id:1, standard:'PHCC Job', domain:'Risk Framework', requirement:'Implement risk management framework', clause:'JD', status:'Conforming', notes:'' },
-                { id:2, standard:'PHCC Job', domain:'Incident Review', requirement:'Review trends & high risk areas', clause:'JD', status:'Conforming', notes:'' },
-                { id:3, standard:'JCI IPSG', domain:'Goal 1', requirement:'Identify patients correctly', clause:'IPSG.1', status:'Conforming', notes:'' },
-                { id:4, standard:'JCI IPSG', domain:'Goal 2', requirement:'Improve communication (read-back)', clause:'IPSG.2', status:'Minor NC', notes:'Inconsistent' },
-                { id:5, standard:'JCI IPSG', domain:'Goal 5', requirement:'Reduce HAI – hand hygiene', clause:'IPSG.5', status:'Major NC', notes:'<80%' },
-                { id:6, standard:'JCI IPSG', domain:'Goal 6', requirement:'Fall prevention', clause:'IPSG.6', status:'Conforming', notes:'' },
-                { id:7, standard:'WHO PSFHI', domain:'Leadership', requirement:'Leadership commitment', clause:'PSFHI-1', status:'Conforming', notes:'' },
-                { id:8, standard:'Accreditation Canada', domain:'Infection Control', requirement:'IPC program effectiveness', clause:'ACI-IC', status:'Major NC', notes:'Sterilization gaps' },
-                { id:9, standard:'ISO 31000', domain:'Risk Assessment', requirement:'Likelihood x impact analysis', clause:'6.4', status:'Conforming', notes:'' },
-                { id:10, standard:'MOPH Qatar', domain:'E-WATHEQ', requirement:'Timely incident reporting', clause:'MOPH-EW', status:'Conforming', notes:'' },
-                { id:11, standard:'Clause 7.2', domain:'Competence', requirement:'Training and awareness', clause:'7.2', status:'Conforming', notes:'' },
-                { id:12, standard:'PHCC Job', domain:'Risk Register', requirement:'Maintain corporate risk register', clause:'JD', status:'Major NC', notes:'Not fully implemented' }
+                {id:1, standard:"PHCC Job", domain:"Risk Register", requirement:"Maintain corporate risk register", clause:"Job Desc", status:"Major NC", notes:"Not fully implemented"},
+                {id:2, standard:"JCI IPSG", domain:"Goal 5", requirement:"Reduce HAI – hand hygiene compliance", clause:"IPSG.5", status:"Major NC", notes:"Hand hygiene <80%"},
+                {id:3, standard:"JCI IPSG", domain:"Goal 2", requirement:"Improve communication (SBAR/read-back)", clause:"IPSG.2", status:"Minor NC", notes:"Inconsistent use"},
+                {id:4, standard:"PHCC Job", domain:"System Approach", requirement:"Review incidents system approach with frontline", clause:"Job Desc", status:"Minor NC", notes:"Needs consistent documentation"},
+                {id:5, standard:"Accreditation Canada", domain:"Infection Control", requirement:"Sterilization process", clause:"ACI-IC-1", status:"Major NC", notes:"Gaps in sterilization"},
+                {id:6, standard:"PHCC Job", domain:"Patient Safety Campaign", requirement:"Lead annual safety campaign", clause:"Job Desc", status:"Opportunity for Improvement", notes:"Not yet launched"},
+                {id:7, standard:"WHO PSFHI", domain:"Patient involvement", requirement:"Patients/public involvement", clause:"PSFHI-2", status:"Opportunity for Improvement", notes:"Materials outdated"},
+                {id:8, standard:"PHCC Job", domain:"Sentinel Events", requirement:"Facilitate systematic RCA", clause:"Job Desc", status:"Minor NC", notes:"No formal RCA process"},
+                {id:9, standard:"JCI IPSG", domain:"Goal 1", requirement:"Two patient identifiers", clause:"IPSG.1", status:"Conforming", notes:""},
+                {id:10, standard:"ISO 31000", domain:"Risk Assessment", requirement:"Likelihood x Impact analysis", clause:"6.4", status:"Conforming", notes:""},
+                {id:11, standard:"Clause 7.2", domain:"Competence", requirement:"Training and awareness", clause:"7.2", status:"Conforming", notes:""}
             ];
             saveCheck(items);
         }
     }
 
-    function renderChecklist() {
-        const items = STORE.checklist();
-        const tbody = document.querySelector('#checklistTable tbody');
-        tbody.innerHTML = items.map(item => `
-            <tr>
-                <td>${item.standard}</td><td>${item.domain}</td><td>${item.requirement}</td><td>${item.clause}</td>
-                <td><select onchange="updateCheckStatus(${item.id}, this.value)" style="background:rgba(0,0,0,0.6); padding:4px; border-radius:20px;">${['Conforming','Minor NC','Major NC','Opportunity for Improvement','Not Applicable'].map(s => `<option ${item.status===s?'selected':''}>${s}</option>`).join('')}</select></td>
-                <td><input type="text" value="${item.notes||''}" onchange="updateCheckNotes(${item.id}, this.value)" style="width:110px;"></td>
-                <td><button class="btn-small" onclick="checklistCAPA(${item.id})">CAPA</button></td>
-            </tr>
-        `).join('');
-        const applicable = items.filter(i => i.status !== 'Not Applicable').length;
-        const conforming = items.filter(i => i.status === 'Conforming').length;
-        const rate = applicable ? Math.round((conforming/applicable)*100) : 0;
-        document.getElementById('statCompliance').innerText = rate+'%';
-        document.getElementById('checklistProgressFill').style.width = rate+'%';
-    }
-    window.updateCheckStatus = (id, status) => { let list = STORE.checklist(); let i = list.find(x=>x.id===id); if(i){ i.status=status; saveCheck(list); renderChecklist(); updateDashboard(); } };
-    window.updateCheckNotes = (id, notes) => { let list = STORE.checklist(); let i = list.find(x=>x.id===id); if(i){ i.notes=notes; saveCheck(list); } };
-    window.checklistCAPA = (id) => showToast('CAPA suggested for this item');
-
-    // ----- INCIDENTS (with filters) -----
-    let currentFilter = { from: null, to: null, location: 'all' };
-    function applyFilters() {
-        currentFilter.from = document.getElementById('filterFrom').value;
-        currentFilter.to = document.getElementById('filterTo').value;
-        currentFilter.location = document.getElementById('filterLocation').value;
-        renderIncidents();
-        updateCharts();  // update trend/severity charts respecting filter
-        showToast('Filters applied');
-    }
-    function resetFilters() {
-        document.getElementById('filterFrom').value = '2026-04-01';
-        document.getElementById('filterTo').value = '2026-04-28';
-        document.getElementById('filterLocation').value = 'all';
-        currentFilter = { from: '2026-04-01', to: '2026-04-28', location: 'all' };
-        renderIncidents();
-        updateCharts();
-        showToast('Filters reset');
-    }
-
+    // ---- INCIDENTS with filters ----
+    let currentFilter = { from: '', to: '', location: 'all' };
     function getFilteredIncidents() {
-        let incidents = STORE.incidents();
-        if (currentFilter.from) incidents = incidents.filter(i => i.date >= currentFilter.from);
-        if (currentFilter.to) incidents = incidents.filter(i => i.date <= currentFilter.to);
-        if (currentFilter.location && currentFilter.location !== 'all') incidents = incidents.filter(i => i.location === currentFilter.location);
-        return incidents;
-    }
-
-    function addIncident() {
         let inc = STORE.incidents();
-        let newId = 'INC-'+String(inc.length+101).padStart(3,'0');
-        inc.unshift({
-            id:newId, date:document.getElementById('incDate').value,
-            type:document.getElementById('incType').value, severity:document.getElementById('incSev').value,
-            location:document.getElementById('incLoc').value, description:document.getElementById('incDesc').value,
-            action:document.getElementById('incAction').value, status:'Open'
-        });
-        saveInc(inc);
-        renderIncidents();
-        updateDashboard();
-        document.getElementById('incDesc').value = '';
-        document.getElementById('incAction').value = '';
-        showToast('Incident reported');
+        if(currentFilter.from) inc = inc.filter(i=>i.date >= currentFilter.from);
+        if(currentFilter.to) inc = inc.filter(i=>i.date <= currentFilter.to);
+        if(currentFilter.location !== 'all') inc = inc.filter(i=>i.location === currentFilter.location);
+        return inc;
+    }
+    function addIncident() {
+        let incs = STORE.incidents();
+        const newId = 'INC-'+String(Date.now()).slice(-6);
+        incs.unshift({ id:newId, date:document.getElementById('incDate').value, type:document.getElementById('incType').value, severity:document.getElementById('incSev').value, location:document.getElementById('incLoc').value, description:document.getElementById('incDesc').value, status:'Open' });
+        saveInc(incs); renderIncidents(); updateDashboard(); toast('Incident reported');
+        document.getElementById('incDesc').value='';
     }
     function renderIncidents() {
-        const inc = getFilteredIncidents();
+        const data = getFilteredIncidents();
         const tbody = document.querySelector('#incidentsTable tbody');
-        tbody.innerHTML = inc.slice(0,30).map(i => `
-            <tr>
-                <td>${i.date}</td><td>${i.type}</td>
-                <td><span class="badge-${i.severity.toLowerCase()}">${i.severity}</span></td>
-                <td>${i.location||'-'}</td>
-                <td><span class="badge-${i.status==='Closed'?'closed':'open'}">${i.status}</span></td>
-                <td><button class="btn-small" onclick="closeIncident('${i.id}')">Close</button></td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = data.slice(0,40).map(i=>`<tr>
+            <td>${i.date}</td><td>${i.type}</td><td><span class="badge-${i.severity.toLowerCase()}">${i.severity}</span></td>
+            <td>${i.location||'-'}</td><td><span class="badge-${i.status==='Closed'?'closed':'open'}">${i.status}</span></td>
+            <td>${i.status !== 'Closed' ? `<button class="btn-small" onclick="closeIncident('${i.id}')">Close</button>` : ''}</td>
+        </tr>`).join('');
     }
-    window.closeIncident = (id) => { let inc = STORE.incidents(); let i = inc.find(x=>x.id===id); if(i){ i.status='Closed'; saveInc(inc); renderIncidents(); updateDashboard(); showToast('Incident closed'); } };
+    window.closeIncident = (id) => { let inc = STORE.incidents(); let i=inc.find(x=>x.id===id); if(i && i.status!=='Closed'){ i.status='Closed'; saveInc(inc); renderIncidents(); updateDashboard(); toast('Incident closed'); } };
 
-    // ----- RISKS (unchanged) -----
-    function riskLevel(score) { if(score>=20) return 'Critical'; if(score>=12) return 'High'; if(score>=6) return 'Medium'; return 'Low'; }
+    // ---- RISKS ----
+    function riskLevel(score){ if(score>=20) return 'Critical'; if(score>=12) return 'High'; if(score>=6) return 'Medium'; return 'Low'; }
     function addRisk() {
         let risks = STORE.risks();
-        let l = parseInt(document.getElementById('riskLikelihood').value);
-        let i = parseInt(document.getElementById('riskImpact').value);
-        let score = l*i, level = riskLevel(score);
-        risks.push({ id:Date.now(), description:document.getElementById('riskDesc').value, likelihood:l, impact:i, score, level, owner:document.getElementById('riskOwner').value });
-        saveRisk(risks);
-        renderRisks();
-        updateDashboard();
-        document.getElementById('riskDesc').value = '';
-        showToast('Risk added');
+        let l = parseInt(document.getElementById('riskLikelihood').value), imp = parseInt(document.getElementById('riskImpact').value);
+        let score = l*imp, lvl = riskLevel(score);
+        risks.push({ id:Date.now(), description:document.getElementById('riskDesc').value, likelihood:l, impact:imp, score, level:lvl, owner:document.getElementById('riskOwner').value });
+        saveRisk(risks); renderRisks(); updateDashboard(); toast('Risk added');
+        document.getElementById('riskDesc').value='';
     }
     function renderRisks() {
-        const risks = STORE.risks();
+        let risks = STORE.risks();
         const tbody = document.querySelector('#riskTable tbody');
-        tbody.innerHTML = risks.map(r => `<tr><td>${r.description}</td><td>${r.likelihood}</td><td>${r.impact}</td><td>${r.score}</td><td><span class="badge-${r.level.toLowerCase()}">${r.level}</span></td><td>${r.owner||'-'}</td><td><button class="btn-small" onclick="deleteRisk(${r.id})">Delete</button></td></tr>`).join('');
+        tbody.innerHTML = risks.map(r=>`<tr>
+            <td>${r.description}</td><td>${r.likelihood}</td><td>${r.impact}</td><td>${r.score}</td>
+            <td><span class="badge-${r.level.toLowerCase()}">${r.level}</span></td><td>${r.owner||'-'}</td>
+            <td><button class="btn-small" onclick="deleteRisk(${r.id})">Del</button></td>
+        </tr>`).join('');
         const matrixDiv = document.getElementById('riskMatrix');
         matrixDiv.innerHTML = '';
         for(let l=5;l>=1;l--) for(let i=1;i<=5;i++) { let s=i*l, lvl=riskLevel(s); matrixDiv.innerHTML += `<div class="matrix-cell badge-${lvl.toLowerCase()}">${i}×${l}=${s}<br>${lvl}</div>`; }
     }
-    window.deleteRisk = (id) => { saveRisk(STORE.risks().filter(r=>r.id!==id)); renderRisks(); updateDashboard(); showToast('Risk deleted'); };
+    window.deleteRisk = (id) => { saveRisk(STORE.risks().filter(r=>r.id!==id)); renderRisks(); updateDashboard(); toast('Risk removed'); };
 
-    // ----- CAPA -----
+    // CAPA
     function addCAPA() {
         let capa = STORE.capa();
-        capa.push({ id:Date.now(), incidentId:document.getElementById('rcaId').value, problem:document.getElementById('rcaProblem').value,
-            why1:document.getElementById('why1').value, why2:document.getElementById('why2').value, why3:document.getElementById('why3').value,
-            why4:document.getElementById('why4').value, why5:document.getElementById('why5').value,
-            correctiveAction:document.getElementById('capaAction').value, responsible:document.getElementById('capaResp').value,
-            targetDate:document.getElementById('capaTarget').value, status:'Open' });
-        saveCAPA(capa);
-        renderCAPA();
-        updateDashboard();
-        ['rcaId','rcaProblem','why1','why2','why3','why4','why5','capaAction','capaResp','capaTarget'].forEach(id=>document.getElementById(id).value='');
-        showToast('CAPA created');
+        capa.push({ id:Date.now(), incidentId:document.getElementById('rcaId').value, problem:document.getElementById('rcaProblem').value, why5:document.getElementById('why5').value, correctiveAction:document.getElementById('capaAction').value, responsible:document.getElementById('capaResp').value, targetDate:document.getElementById('capaTarget').value, status:'Open' });
+        saveCAPA(capa); renderCAPA(); toast('CAPA created');
     }
     function renderCAPA() {
         let capa = STORE.capa();
         const tbody = document.querySelector('#capaTable tbody');
-        tbody.innerHTML = capa.map(c => `<tr><td>${c.incidentId}</td><td>${c.why5 || c.problem?.substring(0,30)||'-'}</td><td>${(c.correctiveAction||'').substring(0,40)}</td><td>${c.responsible||'-'}</td><td>${c.targetDate||'-'}</td><td><span class="badge-${c.status==='Open'?'open':'closed'}">${c.status}</span></td><td><button class="btn-small" onclick="closeCAPA(${c.id})">Close</button> <button class="btn-small" onclick="deleteCAPA(${c.id})">Del</button></td></tr>`).join('');
+        tbody.innerHTML = capa.map(c=>`<tr>
+            <td>${c.incidentId||'-'}</td><td>${c.why5?.substring(0,40)||c.problem?.substring(0,30)||'-'}</td>
+            <td>${(c.correctiveAction||'').substring(0,35)}</td><td>${c.responsible||'-'}</td><td>${c.targetDate||'-'}</td>
+            <td><span class="badge-${c.status==='Open'?'open':'closed'}">${c.status}</span></td>
+            <td><button class="btn-small" onclick="closeCAPA(${c.id})">Close</button></td>
+        </tr>`).join('');
     }
-    window.closeCAPA = (id) => { let capa = STORE.capa(); let c = capa.find(x=>x.id===id); if(c){ c.status='Closed'; saveCAPA(capa); renderCAPA(); updateDashboard(); showToast('CAPA closed'); } };
-    window.deleteCAPA = (id) => { saveCAPA(STORE.capa().filter(x=>x.id!==id)); renderCAPA(); updateDashboard(); showToast('CAPA deleted'); };
+    window.closeCAPA = (id) => { let capa = STORE.capa(); let c=capa.find(x=>x.id===id); if(c && c.status!=='Closed'){ c.status='Closed'; saveCAPA(capa); renderCAPA(); updateDashboard(); toast('CAPA closed'); } };
 
-    // ----- TRAINING -----
+    // Training
     function addTraining() {
         let t = STORE.training();
         let expiry = document.getElementById('trainExpiry').value;
-        let status = new Date(expiry) > new Date() ? 'Valid' : 'Expired';
+        let status = (new Date(expiry) > new Date()) ? 'Valid' : 'Expired';
         t.push({ id:Date.now(), staff:document.getElementById('trainStaff').value, topic:document.getElementById('trainTopic').value, date:document.getElementById('trainDate').value, expiry, score:document.getElementById('trainScore').value, status });
-        saveTrain(t);
-        renderTraining();
-        updateDashboard();
-        showToast('Training added');
+        saveTrain(t); renderTraining(); updateDashboard(); toast('Training added');
     }
     function renderTraining() {
         let t = STORE.training();
         const tbody = document.querySelector('#trainingTable tbody');
-        tbody.innerHTML = t.map(t => `<tr><td>${t.staff}</td><td>${t.topic}</td><td>${t.date}</td><td>${t.expiry||'N/A'}</td><td>${t.score}%</td><td><span class="badge-${t.status==='Valid'?'valid':'open'}">${t.status}</span></td><td><button class="btn-small" onclick="deleteTraining(${t.id})">Delete</button></td></tr>`).join('');
-        let valid = t.filter(tr=>new Date(tr.expiry) > new Date()).length;
-        let rate = t.length ? Math.round((valid/t.length)*100) : 0;
+        tbody.innerHTML = t.map(tr=>`<tr>
+            <td>${tr.staff}</td><td>${tr.topic}</td><td>${tr.date}</td><td>${tr.expiry||'N/A'}</td>
+            <td>${tr.score}%</td><td><span class="badge-${tr.status==='Valid'?'valid':'expired'}">${tr.status}</span></td>
+            <td><button class="btn-small" onclick="deleteTraining(${tr.id})">Del</button></td>
+        </tr>`).join('');
+        let validCount = t.filter(tr=>tr.status==='Valid').length;
+        let rate = t.length ? Math.round((validCount/t.length)*100) : 0;
         document.getElementById('trainingProgressFill').style.width = rate+'%';
         document.getElementById('statTrainingRate').innerText = rate+'%';
     }
-    window.deleteTraining = (id) => { saveTrain(STORE.training().filter(x=>x.id!==id)); renderTraining(); updateDashboard(); showToast('Training deleted'); };
+    window.deleteTraining = (id) => { saveTrain(STORE.training().filter(x=>x.id!==id)); renderTraining(); updateDashboard(); };
 
-    // ----- ADVANCED CHARTS (root cause + severity trend) -----
-    let trendChart, severityChart, riskChart, rootCauseChart, severityTrendChart;
+    // Checklist rendering & dynamic update
+    function renderChecklist() {
+        let items = STORE.checklist();
+        const tbody = document.querySelector('#checklistTable tbody');
+        tbody.innerHTML = items.map(item => `
+            <tr>
+                <td>${item.standard}</td><td>${item.domain}</td><td>${item.requirement}</td><td>${item.clause}</td>
+                <td><select onchange="updateCheckStatus(${item.id}, this.value)" style="background:#1e2a2a;">${['Conforming','Minor NC','Major NC','Opportunity for Improvement','Not Applicable'].map(s=>`<option ${item.status===s?'selected':''}>${s}</option>`).join('')}</select></td>
+                <td><input type="text" value="${item.notes||''}" onchange="updateCheckNotes(${item.id}, this.value)" style="width:110px;"></td>
+                <td><button class="btn-small" onclick="toast('CAPA suggested for this item')">📌 CAPA</button></td>
+            </tr>
+        `).join('');
+        let applicable = items.filter(i=>i.status!=='Not Applicable').length;
+        let conforming = items.filter(i=>i.status==='Conforming').length;
+        let score = applicable ? Math.round((conforming/applicable)*100) : 0;
+        document.getElementById('statCompliance').innerText = score+'%';
+        document.getElementById('checklistProgressFill').style.width = score+'%';
+    }
+    window.updateCheckStatus = (id, status) => { let list = STORE.checklist(); let i=list.find(x=>x.id===id); if(i){ i.status=status; saveCheck(list); renderChecklist(); updateDashboard(); } };
+    window.updateCheckNotes = (id, notes) => { let list = STORE.checklist(); let i=list.find(x=>x.id===id); if(i){ i.notes=notes; saveCheck(list); } };
+    function exportGapCSV() { let items = STORE.checklist(); let csv = "Standard,Domain,Requirement,Clause,Status,Notes\n"+items.map(i=>`"${i.standard}","${i.domain}","${i.requirement}","${i.clause}","${i.status}","${i.notes}"`).join("\n"); const blob=new Blob([csv],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PHCC_Gap_Analysis.csv'; a.click(); toast('CSV exported'); }
 
+    // CHARTS (simplified functional)
+    let trendChart, severityChart, riskChart, rootChart, severityTrendChart;
     function updateCharts() {
         const incidents = getFilteredIncidents();
-        // 1. incident trend (last 30 days)
-        const last30 = [], counts = [];
-        for(let i=29;i>=0;i--){ let d=new Date(); d.setDate(d.getDate()-i); let ds=d.toISOString().split('T')[0]; last30.push(ds.substring(5)); counts.push(incidents.filter(inc=>inc.date===ds).length); }
-        if(trendChart) trendChart.destroy();
-        trendChart = new Chart(document.getElementById('trendCanvas'), { type:'line', data:{ labels:last30, datasets:[{ label:'Incidents', data:counts, borderColor:'#00ffc6', backgroundColor:'rgba(0,255,198,0.1)', fill:true, tension:0.4 }] }, options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } }, animation:{ duration:800 } } });
-
-        // 2. severity doughnut
-        const sevMap = {Critical:0, High:0, Medium:0, Low:0};
-        incidents.forEach(i=> sevMap[i.severity]++);
-        if(severityChart) severityChart.destroy();
-        severityChart = new Chart(document.getElementById('severityCanvas'), { type:'doughnut', data:{ labels:Object.keys(sevMap), datasets:[{ data:Object.values(sevMap), backgroundColor:['#ff4d6d','#ffaa44','#00b4ff','#00ffc6'], borderWidth:0 }] }, options:{ cutout:'65%', plugins:{ legend:{ position:'bottom' } }, animation:{ duration:800 } } });
-
-        // 3. risk distribution
-        const risks = STORE.risks();
-        const riskLevels = {Critical:0, High:0, Medium:0, Low:0};
-        risks.forEach(r=> riskLevels[r.level]++);
-        if(riskChart) riskChart.destroy();
-        riskChart = new Chart(document.getElementById('riskCanvas'), { type:'bar', data:{ labels:Object.keys(riskLevels), datasets:[{ data:Object.values(riskLevels), backgroundColor:['#ff4d6d','#ffaa44','#00b4ff','#00ffc6'], borderRadius:12 }] }, options:{ plugins:{ legend:{ display:false } }, animation:{ duration:800 } } });
-
-        // 4. ROOT CAUSE CHART (top 5 from CAPA)
-        const capaList = STORE.capa();
-        const rootCauseCount = new Map();
-        capaList.forEach(c => {
-            let cause = c.why5 || c.problem?.substring(0,40) || 'Not specified';
-            rootCauseCount.set(cause, (rootCauseCount.get(cause) || 0) + 1);
-        });
-        const sortedCauses = Array.from(rootCauseCount.entries()).sort((a,b) => b[1] - a[1]).slice(0,5);
-        if(rootCauseChart) rootCauseChart.destroy();
-        rootCauseChart = new Chart(document.getElementById('rootCauseCanvas'), { type:'bar', data:{ labels:sortedCauses.map(x=>x[0].substring(0,25)), datasets:[{ label:'Frequency', data:sortedCauses.map(x=>x[1]), backgroundColor:'#00ffc6', borderRadius:10 }] }, options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Occurrences' } } }, animation:{ duration:800 } } });
-
-        // 5. severity trend over time (filtered incidents, aggregated by week)
-        const severityByDate = {};
-        incidents.forEach(inc => {
-            if (!severityByDate[inc.date]) severityByDate[inc.date] = { Critical:0, High:0, Medium:0, Low:0 };
-            severityByDate[inc.date][inc.severity]++;
-        });
-        const dates = Object.keys(severityByDate).sort().slice(-14);
-        const criticalData = dates.map(d => severityByDate[d].Critical || 0);
-        const highData = dates.map(d => severityByDate[d].High || 0);
-        const mediumData = dates.map(d => severityByDate[d].Medium || 0);
-        const lowData = dates.map(d => severityByDate[d].Low || 0);
-        if(severityTrendChart) severityTrendChart.destroy();
-        severityTrendChart = new Chart(document.getElementById('severityTrendCanvas'), { type:'line', data:{ labels:dates, datasets:[
-            { label:'Critical', data:criticalData, borderColor:'#ff4d6d', tension:0.3, fill:false },
-            { label:'High', data:highData, borderColor:'#ffaa44', tension:0.3, fill:false },
-            { label:'Medium', data:mediumData, borderColor:'#00b4ff', tension:0.3, fill:false },
-            { label:'Low', data:lowData, borderColor:'#00ffc6', tension:0.3, fill:false }
-        ] }, options:{ responsive:true, plugins:{ tooltip:{ mode:'index' } }, scales:{ y:{ stacked:false, beginAtZero:true } } } });
+        const last30=[], counts=[]; for(let i=29;i>=0;i--){ let d=new Date(); d.setDate(d.getDate()-i); let ds=d.toISOString().split('T')[0]; last30.push(ds.slice(5)); counts.push(incidents.filter(inc=>inc.date===ds).length); }
+        if(trendChart) trendChart.destroy(); trendChart = new Chart(document.getElementById('trendCanvas'), { type:'line', data:{ labels:last30, datasets:[{ label:'Incidents', data:counts, borderColor:'#00ffc6', tension:0.3, fill:true }] } });
+        const sevMap={Critical:0,High:0,Medium:0,Low:0}; incidents.forEach(i=>sevMap[i.severity]++);
+        if(severityChart) severityChart.destroy(); severityChart = new Chart(document.getElementById('severityCanvas'), { type:'doughnut', data:{ labels:Object.keys(sevMap), datasets:[{ data:Object.values(sevMap), backgroundColor:['#ff4d6d','#ffaa44','#00b4ff','#00ffc6'] }] }, options:{ cutout:'60%' } });
+        const risks=STORE.risks(); let riskLvls={Critical:0,High:0,Medium:0,Low:0}; risks.forEach(r=>riskLvls[r.level]++);
+        if(riskChart) riskChart.destroy(); riskChart = new Chart(document.getElementById('riskCanvas'), { type:'bar', data:{ labels:Object.keys(riskLvls), datasets:[{ data:Object.values(riskLvls), backgroundColor:'#00ffc6' }] } });
+        const capaList=STORE.capa(); let causeMap=new Map(); capaList.forEach(c=>{ let cause=c.why5||c.problem||'Unspecified'; causeMap.set(cause,(causeMap.get(cause)||0)+1); });
+        const sorted=Array.from(causeMap.entries()).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        if(rootChart) rootChart.destroy(); rootChart = new Chart(document.getElementById('rootCauseCanvas'), { type:'bar', data:{ labels:sorted.map(x=>x[0].substring(0,20)), datasets:[{ label:'Frequency', data:sorted.map(x=>x[1]), backgroundColor:'#00b4ff' }] } });
+        let sevByDate={}; incidents.forEach(inc=>{ if(!sevByDate[inc.date]) sevByDate[inc.date]={Critical:0,High:0,Medium:0,Low:0}; sevByDate[inc.date][inc.severity]++; });
+        let dates=Object.keys(sevByDate).sort().slice(-14);
+        if(severityTrendChart) severityTrendChart.destroy(); severityTrendChart = new Chart(document.getElementById('severityTrendCanvas'), { type:'line', data:{ labels:dates, datasets:[{label:'Critical',data:dates.map(d=>sevByDate[d].Critical||0),borderColor:'#ff4d6d'},{label:'High',data:dates.map(d=>sevByDate[d].High||0),borderColor:'#ffaa44'},{label:'Medium',data:dates.map(d=>sevByDate[d].Medium||0),borderColor:'#00b4ff'},{label:'Low',data:dates.map(d=>sevByDate[d].Low||0),borderColor:'#00ffc6'}] } });
     }
-
     function updateDashboard() {
-        const incidents = getFilteredIncidents(), risks = STORE.risks(), training = STORE.training(), checklist = STORE.checklist();
-        document.getElementById('statTotalIncidents').innerText = incidents.length;
-        document.getElementById('statOpenIncidents').innerText = incidents.filter(i=>i.status!=='Closed').length;
-        document.getElementById('statActiveRisks').innerText = risks.length;
-        document.getElementById('statHighRisk').innerText = risks.filter(r=>r.level==='High'||r.level==='Critical').length;
-        let validTrain = training.filter(t=>new Date(t.expiry) > new Date()).length;
-        document.getElementById('statTrainingRate').innerText = training.length ? Math.round((validTrain/training.length)*100) : 0;
+        const inc=getFilteredIncidents(), risks=STORE.risks(), training=STORE.training(), checklist=STORE.checklist();
+        document.getElementById('statTotalIncidents').innerText=inc.length;
+        document.getElementById('statOpenIncidents').innerText=inc.filter(i=>i.status!=='Closed').length;
+        document.getElementById('statActiveRisks').innerText=risks.length;
+        document.getElementById('statHighRisk').innerText=risks.filter(r=>r.level==='High'||r.level==='Critical').length;
+        let validTrain=training.filter(t=>new Date(t.expiry)>new Date()).length;
+        document.getElementById('statTrainingRate').innerText=training.length?Math.round((validTrain/training.length)*100):0;
         let applicable = checklist.filter(i=>i.status!=='Not Applicable').length;
         let conforming = checklist.filter(i=>i.status==='Conforming').length;
         document.getElementById('statCompliance').innerText = applicable ? Math.round((conforming/applicable)*100) : 0;
         updateCharts();
     }
-
-    // ---------- QUARTERLY REPORT (text) ----------
+    function applyFilters() { currentFilter.from=document.getElementById('filterFrom').value; currentFilter.to=document.getElementById('filterTo').value; currentFilter.location=document.getElementById('filterLocation').value; renderIncidents(); updateDashboard(); toast('Filters applied'); }
+    function resetFilters() { document.getElementById('filterFrom').value=''; document.getElementById('filterTo').value=''; document.getElementById('filterLocation').value='all'; currentFilter={from:'',to:'',location:'all'}; renderIncidents(); updateDashboard(); toast('Filters reset'); }
     function generateQuarterlyReport() {
-        const inc = getFilteredIncidents(), risks = STORE.risks(), capa = STORE.capa(), training = STORE.training(), checklist = STORE.checklist();
-        const out = document.getElementById('reportOutput');
-        out.style.display = 'block';
-        out.innerHTML = `
-╔══════════════════════════════════════════════════════════════════╗
-║     PHCC QUARTERLY RISK & PATIENT SAFETY REPORT (MOPH Format)    ║
-╚══════════════════════════════════════════════════════════════════╝
-Date: ${new Date().toISOString().split('T')[0]} | Prepared by: Chokri Hfaiedh
-Filter: ${currentFilter.from || 'start'} → ${currentFilter.to || 'end'} | Location: ${currentFilter.location === 'all' ? 'All' : currentFilter.location}
---- INCIDENTS -------------------------------------------------------
-Total: ${inc.length} | Open: ${inc.filter(i=>i.status!=='Closed').length} | Closed: ${inc.filter(i=>i.status==='Closed').length}
-Severity: Critical ${inc.filter(i=>i.severity==='Critical').length} | High ${inc.filter(i=>i.severity==='High').length} | Medium ${inc.filter(i=>i.severity==='Medium').length} | Low ${inc.filter(i=>i.severity==='Low').length}
---- RISKS -----------------------------------------------------------
-Active: ${risks.length} | High/Critical: ${risks.filter(r=>r.level==='High'||r.level==='Critical').length}
---- CAPA ------------------------------------------------------------
-Open: ${capa.filter(c=>c.status!=='Closed').length} | Closed: ${capa.filter(c=>c.status==='Closed').length}
---- TRAINING (Clause 7.2) ------------------------------------------
-Records: ${training.length} | Valid: ${training.filter(t=>new Date(t.expiry) > new Date()).length}
-Compliance Rate: ${document.getElementById('statTrainingRate').innerText}%
---- CHECKLIST COMPLIANCE -------------------------------------------
-Overall: ${document.getElementById('statCompliance').innerText}%
-Major NC: ${checklist.filter(i=>i.status==='Major NC').length} | Minor NC: ${checklist.filter(i=>i.status==='Minor NC').length}
---- TOP NON-CONFORMITIES -------------------------------------------
-${checklist.filter(i=>i.status==='Major NC'||i.status==='Minor NC').slice(0,4).map((i,idx)=>`${idx+1}. ${i.standard} - ${i.requirement} (${i.status})`).join('\n')||'None'}
---- RECOMMENDATIONS ------------------------------------------------
-1. Address all Major NCs (hand hygiene, risk register)
-2. Close open CAPAs before next quarter
-3. Improve communication (IPSG.2) – implement read-back protocol
-4. Update patient safety campaign for Q3
-══════════════════════════════════════════════════════════════════`;
+        const inc=getFilteredIncidents(), risks=STORE.risks(), capa=STORE.capa(), training=STORE.training(), checklist=STORE.checklist();
+        const outDiv=document.getElementById('reportOutput'); outDiv.style.display='block';
+        outDiv.innerText = `PHCC Quarterly Report\nDate: ${new Date().toISOString().slice(0,10)}\nIncidents: ${inc.length} | Open: ${inc.filter(i=>i.status!=='Closed').length}\nHigh/Critical Risks: ${risks.filter(r=>r.level==='High'||r.level==='Critical').length}\nCAPA Open: ${capa.filter(c=>c.status!=='Closed').length}\nCompliance Score: ${document.getElementById('statCompliance').innerText}%\nMajor NCs: ${checklist.filter(i=>i.status==='Major NC').length}\nRecommendations: 1) Address hand hygiene & risk register gaps 2) Improve SBAR/read-back 3) Launch safety campaign.`;
     }
-    window.generateQuarterlyReport = generateQuarterlyReport;
-
-    // PDF EXPORT
-    async function downloadPDFReport() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-        const reportText = document.getElementById('reportOutput')?.innerText || (await (() => { generateQuarterlyReport(); return document.getElementById('reportOutput').innerText; })());
-        doc.setFont('courier');
-        doc.setFontSize(10);
-        const lines = doc.splitTextToSize(reportText, 180);
-        doc.text(lines, 15, 20);
-        doc.save('PHCC_Quarterly_Report.pdf');
-        showToast('PDF report downloaded');
-    }
-    window.downloadPDFReport = downloadPDFReport;
-
-    function exportGapAnalysis() {
-        let items = STORE.checklist();
-        let csv = "Standard,Domain,Requirement,Clause,Status,Notes\n";
-        items.forEach(i => csv += `"${i.standard}","${i.domain}","${i.requirement}","${i.clause}","${i.status}","${i.notes||''}"\n`);
-        const blob = new Blob([csv], {type:'text/csv'});
-        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'PHCC_Gap_Analysis.csv'; link.click();
-        showToast('CSV exported');
-    }
-    window.exportGapAnalysis = exportGapAnalysis;
-
-    // Tab switching
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(`tab-${tabId}`).classList.add('active');
-        const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.dataset.tab === tabId);
-        if(btn) btn.classList.add('active');
-        if(tabId === 'checklist') renderChecklist();
-        if(tabId === 'training') renderTraining();
-        if(tabId === 'incidents') renderIncidents();
-        if(tabId === 'riskregister') renderRisks();
-        if(tabId === 'rca') renderCAPA();
-    }
-    window.switchTab = switchTab;
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-
-    // Init demo data
+    async function downloadPDFReport() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("PHCC Quarterly Report", 10,10); doc.save("PHCC_Report.pdf"); toast("PDF downloaded"); }
+    window.generateQuarterlyReport = generateQuarterlyReport; window.downloadPDFReport = downloadPDFReport; window.exportGapCSV = exportGapCSV;
+    function switchTab(tabId) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(`tab-${tabId}`).classList.add('active'); Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.dataset.tab===tabId)?.classList.add('active'); if(tabId==='checklist') renderChecklist(); if(tabId==='training') renderTraining(); if(tabId==='incidents') renderIncidents(); if(tabId==='riskregister') renderRisks(); if(tabId==='rca') renderCAPA(); }
+    window.switchTab = switchTab; document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
     function initDemo() {
-        if(STORE.incidents().length === 0){
-            let samples = [];
-            for(let i=0;i<20;i++){ let d=new Date(); d.setDate(d.getDate()-i); samples.push({ id:`INC-${101+i}`, date:d.toISOString().split('T')[0], type:['Patient Fall','Medication Error','HAI','Communication Error'][i%4], severity:['Low','Medium','High','Critical'][i%4], location:'HC '+(i%5+1), description:'Demo', action:'Evaluated', status:i<5?'Closed':(i<12?'In Progress':'Open') }); }
-            saveInc(samples);
-        }
-        if(STORE.risks().length === 0) saveRisk([{ id:1, description:'Hand hygiene <80%', likelihood:4, impact:5, score:20, level:'Critical', owner:'Quality Mgr' },{ id:2, description:'Staff shortage IPC', likelihood:4, impact:4, score:16, level:'High', owner:'IPC Lead' }]);
-        if(STORE.training().length === 0) saveTrain([{ id:1, staff:'Sara Johnson', topic:'Hand Hygiene', date:'2026-02-10', expiry:'2027-02-10', score:98, status:'Valid' },{ id:2, staff:'Ahmed Hassan', topic:'IPSG', date:'2026-01-15', expiry:'2027-01-15', score:85, status:'Valid' }]);
-        if(STORE.capa().length === 0) saveCAPA([{ id:1, incidentId:'INC-001', problem:'Poor hand hygiene', why5:'Lack of training', correctiveAction:'Retrain staff', responsible:'Nurse Lead', targetDate:'2026-05-15', status:'Open' }]);
+        if(STORE.incidents().length===0){ let sample=[]; for(let i=0;i<18;i++){ let d=new Date(); d.setDate(d.getDate()-i); sample.push({ id:`INC-${100+i}`, date:d.toISOString().slice(0,10), type:['Patient Fall','Medication Error','HAI','Communication Error'][i%4], severity:['Low','Medium','High','Critical'][i%4], location:`HC ${(i%5)+1}`, status:i<3?'Closed':'Open' }); } saveInc(sample); }
+        if(STORE.risks().length===0) saveRisk([{ id:1, description:'Hand hygiene compliance <80%', likelihood:4, impact:5, score:20, level:'Critical', owner:'IPC Lead' },{ id:2, description:'Incomplete Risk Register', likelihood:4, impact:4, score:16, level:'High', owner:'QM Manager' }]);
+        if(STORE.training().length===0) saveTrain([{ id:1, staff:'Dr. Aisha', topic:'Hand Hygiene', date:'2026-02-10', expiry:'2027-02-10', score:92, status:'Valid' },{ id:2, staff:'Nurse Rashed', topic:'IPSG', date:'2026-01-15', expiry:'2027-01-15', score:78, status:'Valid' }]);
+        if(STORE.capa().length===0) saveCAPA([{ id:1, incidentId:'INC-101', problem:'Hand hygiene failure', why5:'Lack of auditing', correctiveAction:'Monthly audits', responsible:'Infection Control', targetDate:'2026-06-01', status:'Open' }]);
         initChecklist();
     }
-    initDemo();
-    renderIncidents();
-    renderRisks();
-    renderCAPA();
-    renderTraining();
-    renderChecklist();
-    updateDashboard();
-    // set default filter range to last 30 days
-    const today = new Date().toISOString().split('T')[0];
-    const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate()-30); document.getElementById('filterFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
-    document.getElementById('filterTo').value = today;
-    currentFilter = { from: thirtyDaysAgo.toISOString().split('T')[0], to: today, location: 'all' };
-    applyFilters();
+    initDemo(); renderIncidents(); renderRisks(); renderCAPA(); renderTraining(); renderChecklist(); updateDashboard();
+    const today = new Date().toISOString().slice(0,10); const lastMonth = new Date(); lastMonth.setDate(lastMonth.getDate()-30); document.getElementById('filterFrom').value = lastMonth.toISOString().slice(0,10); document.getElementById('filterTo').value = today; applyFilters();
 </script>
 </body>
 </html>
